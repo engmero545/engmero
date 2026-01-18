@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة المهندسة أميرة الذكية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --p: #6c5ce7; --s: #a29bfe; --a: #00cec9; --bg: #f8f9fc; }
+        body { font-family: 'Tajawal', sans-serif; margin: 0; background: var(--bg); overflow-x: hidden; }
+        
+        /* شاشة البداية */
+        #splash { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; background: linear-gradient(135deg, var(--p), var(--s)); color: white; position: fixed; width: 100%; z-index: 2000; transition: 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-start { padding: 18px 70px; font-size: 1.5rem; border: none; border-radius: 50px; background: white; color: var(--p); cursor: pointer; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.2); transition: 0.3s; }
+        .btn-start:hover { transform: scale(1.1); }
+
+        /* التطبيق الرئيسي */
+        #app { display: none; padding: 20px; max-width: 480px; margin: auto; opacity: 0; transition: 0.5s; }
+        .card { background: white; border-radius: 30px; padding: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); text-align: center; margin-top: 10px; }
+        
+        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 25px 0; }
+        .box { background: #fdfdfd; border: 2px dashed #dcdde1; padding: 15px 5px; border-radius: 20px; cursor: pointer; font-size: 0.85rem; transition: 0.3s; color: #2d3436; }
+        .box:hover { border-color: var(--p); color: var(--p); background: #f5f3ff; }
+
+        textarea { width: 100%; height: 130px; border: 2px solid #f1f2f6; border-radius: 22px; padding: 18px; box-sizing: border-box; font-family: inherit; font-size: 1rem; margin-bottom: 20px; background: #fafafa; resize: none; }
+        .btn-solve { width: 100%; padding: 18px; background: var(--p); color: white; border: none; border-radius: 22px; font-size: 1.3rem; font-weight: bold; cursor: pointer; box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3); }
+
+        /* الحاسبة العلمية المنبثقة */
+        #calc { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #2d3436; padding: 20px; border-radius: 30px; z-index: 3000; width: 300px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); }
+        .c-screen { width: 100%; height: 60px; background: #636e72; border: none; color: white; text-align: left; padding: 15px; font-size: 1.4rem; margin-bottom: 15px; border-radius: 12px; box-sizing: border-box; }
+        .c-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .c-btn { padding: 12px; border: none; border-radius: 10px; background: #4b5563; color: white; font-size: 1rem; cursor: pointer; }
+        .c-btn.op { background: var(--p); }
+        .c-btn.sci { background: #57606f; font-size: 0.8rem; }
+
+        .calc-icon { position: fixed; left: 20px; bottom: 20px; background: #2d3436; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .footer { text-align: center; margin-top: 40px; color: #a0a0a0; font-size: 1rem; line-height: 1.5; }
+        #res { margin-top: 25px; padding: 20px; border-radius: 20px; background: #f0fff4; display: none; text-align: right; border-right: 6px solid var(--a); animation: slideIn 0.5s ease; }
+        
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div id="splash">
+        <i class="fas fa-microchip fa-5x" style="margin-bottom:25px"></i>
+        <h1 style="font-size: 2.8rem; margin-bottom:10px">المهندسة أميرة</h1>
+        <p style="margin-bottom:40px; opacity:0.9">مستقبلك يبدأ هنا مع الذكاء الاصطناعي</p>
+        <button class="btn-start" onclick="startApp()">ابدأ الآن</button>
+    </div>
+
+    <div id="app">
+        <div class="card">
+            <h2 style="color:var(--p); margin-top:0">مركز الحلول الذكي 🧠</h2>
+            
+            <div class="upload-grid">
+                <div class="box" onclick="alert('جاري تشغيل الكاميرا...')"><i class="fas fa-camera-retro fa-2x"></i><br>كاميرا</div>
+                <div class="box" onclick="alert('فتح الاستوديو...')"><i class="fas fa-images fa-2x"></i><br>صور</div>
+                <div class="box" onclick="alert('اختيار مستند...')"><i class="fas fa-file-invoice fa-2x"></i><br>مستند</div>
+            </div>
+
+            <textarea id="txtIn" placeholder="اكتبي مسألتك هنا بكل تفصيل يا مهندسة..."></textarea>
+            
+            <button class="btn-solve" onclick="solveNow()">حل المسألة ✨</button>
+
+            <div id="res"></div>
+        </div>
+
+        <div class="footer">
+            بإشراف المهندسة <br>
+            <span style="color:var(--p); font-weight:bold; font-size:1.2rem">eng.ameira</span>
+        </div>
+    </div>
+
+    <div id="calc">
+        <div style="color:#ff7675; cursor:pointer; text-align:left; margin-bottom:15px; font-weight:bold" onclick="toggleCalc()">✖ إغلاق الحاسبة</div>
+        <input type="text" id="c-disp" class="c-screen" readonly>
+        <div class="c-grid">
+            <button class="c-btn sci" onclick="addC('Math.sin(')">sin</button>
+            <button class="c-btn sci" onclick="addC('Math.cos(')">cos</button>
+            <button class="c-btn sci" onclick="addC('Math.tan(')">tan</button>
+            <button class="c-btn op" onclick="clrC()">C</button>
+            
+            <button class="c-btn" onclick="addC('7')">7</button>
+            <button class="c-btn" onclick="addC('8')">8</button>
+            <button class="c-btn" onclick="addC('9')">9</button>
+            <button class="c-btn op" onclick="addC('/')">/</button>
+            
+            <button class="c-btn" onclick="addC('4')">4</button>
+            <button class="c-btn" onclick="addC('5')">5</button>
+            <button class="c-btn" onclick="addC('6')">6</button>
+            <button class="c-btn op" onclick="addC('*')">×</button>
+            
+            <button class="c-btn" onclick="addC('1')">1</button>
+            <button class="c-btn" onclick="addC('2')">2</button>
+            <button class="c-btn" onclick="addC('3')">3</button>
+            <button class="c-btn op" onclick="addC('-')">-</button>
+            
+            <button class="c-btn" onclick="addC('0')">0</button>
+            <button class="c-btn" onclick="addC('.')">.</button>
+            <button class="c-btn op" style="background:var(--a); grid-column: span 2;" onclick="resC()">=</button>
+        </div>
+    </div>
+
+    <div class="calc-icon" onclick="toggleCalc()"><i class="fas fa-calculator fa-xl"></i></div>
+
+    <script>
+        function startApp() {
+            document.getElementById('splash').style.transform = 'translateY(-100%)';
+            setTimeout(() => { 
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                setTimeout(() => document.getElementById('app').style.opacity = '1', 50);
+            }, 700);
+        }
+
+        function toggleCalc() {
+            const m = document.getElementById('calc');
+            m.style.display = (m.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function addC(v) { document.getElementById('c-disp').value += v; }
+        function clrC() { document.getElementById('c-disp').value = ''; }
+        function resC() { 
+            try { document.getElementById('c-disp').value = eval(document.getElementById('c-disp').value); } 
+            catch { document.getElementById('c-disp').value = 'خطأ'; } 
+        }
+
+        async function solveNow() {
+            const input = document.getElementById('txtIn').value;
+            const output = document.getElementById('res');
+            // المفتاح الذي أرسلتِه مدمج هنا بدقة
+            const key = "AIzaSyAPefutrGvEQyK8A9T2iMhfGqkksz3sRCE"; 
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+
+            if(!input) return alert("اكتبي مسألتكِ أولاً يا بشمهندسة!");
+            output.style.display = "block";
+            output.innerHTML = "<i class='fas fa-sync fa-spin'></i> المهندسة أميرة تحلل مسألتك الآن...";
+
+            try {
+                const r = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: input }] }] })
+                });
+                const d = await r.json();
+                output.innerHTML = "<strong>الحل النهائي:</strong><br><p>" + d.candidates[0].content.parts[0].text.replace(/\n/g, "<br>") + "</p>";
+            } catch (e) {
+                output.innerHTML = "عذراً، تأكدي من الاتصال بالإنترنت أو تفعيل المفتاح.";
+            }
+        }
+    </script>
+</body>
+</html>
